@@ -2,24 +2,33 @@ package com.codingwithmitch.foodrecipes.adapters;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.codingwithmitch.foodrecipes.R;
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.codingwithmitch.foodrecipes.util.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.codingwithmitch.foodrecipes.util.Constants.PAGINATION_NUMBER;
 
-public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
+        ListPreloader.PreloadModelProvider<String>
+{
 
     private static final String TAG = "RecipeRecyclerAdapter";
 
@@ -30,9 +39,15 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private List<Recipe> mRecipes;
     private OnRecipeListener mOnRecipeListener;
+    private ViewPreloadSizeProvider<String> mPreloadSizeProvider;
+    private RequestManager mRequestManager;
 
-    public RecipeRecyclerAdapter(OnRecipeListener mOnRecipeListener) {
+    public RecipeRecyclerAdapter(OnRecipeListener mOnRecipeListener,
+                                 ViewPreloadSizeProvider<String> viewPreloadSizeProvider,
+                                 RequestManager requestManager) {
         this.mOnRecipeListener = mOnRecipeListener;
+        this.mPreloadSizeProvider = viewPreloadSizeProvider;
+        this.mRequestManager = requestManager;
     }
 
     @NonNull
@@ -76,11 +91,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         int itemViewType = getItemViewType(i);
         if(itemViewType == RECIPE_TYPE){
-            RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.white_background);
 
-            Glide.with(viewHolder.itemView.getContext())
-                    .setDefaultRequestOptions(requestOptions)
+            mRequestManager
                     .load(mRecipes.get(i).getImage_url())
                     .into(((RecipeViewHolder)viewHolder).image);
 
@@ -88,20 +100,19 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((RecipeViewHolder)viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
             ((RecipeViewHolder)viewHolder).socialScore.setText(String.valueOf(Math.round(mRecipes.get(i).getSocial_rank())));
 //            ((RecipeViewHolder)viewHolder).socialScore.setText(String.valueOf(i)); // Test the pagination
+
+            mPreloadSizeProvider.setView(((RecipeViewHolder)viewHolder).image);
         }
         else if(itemViewType == CATEGORY_TYPE){
 
-            RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.white_background);
-
             Uri path = Uri.parse("android.resource://com.codingwithmitch.foodrecipes/drawable/" + mRecipes.get(i).getImage_url());
-            Glide.with(viewHolder.itemView.getContext())
-                    .setDefaultRequestOptions(requestOptions)
+            mRequestManager
                     .load(path)
                     .into(((CategoryViewHolder)viewHolder).categoryImage);
 
             ((CategoryViewHolder)viewHolder).categoryTitle.setText(mRecipes.get(i).getTitle());
 
+            mPreloadSizeProvider.setView(((CategoryViewHolder)viewHolder).categoryImage);
         }
 
     }
@@ -223,6 +234,25 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
         notifyDataSetChanged();
     }
+
+    @NonNull
+    @Override
+    public List<String> getPreloadItems(int position) {
+//        Log.d(TAG, "getPreloadItems: called: " + position );
+        String url = mRecipes.get(position).getImage_url();
+        if (TextUtils.isEmpty(url)) {
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(url);
+    }
+
+    @Nullable
+    @Override
+    public RequestBuilder<?> getPreloadRequestBuilder(@NonNull String item) {
+//        Log.d(TAG, "getPreloadRequestBuilder: called: " + item);
+        return mRequestManager.load(item);
+    }
+
 }
 
 

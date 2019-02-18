@@ -3,6 +3,7 @@ package com.codingwithmitch.foodrecipes.util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     private AppExecutors appExecutors;
     private MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
+    private boolean cancelRequest;
 
     public NetworkBoundResource(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
@@ -68,6 +70,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
      * @param dbSource
      */
     private void fetchFromNetwork(final LiveData<ResultType> dbSource){
+        Log.d(TAG, "fetchFromNetwork: called.");
         final LiveData<ApiResponse<RequestType>> apiResponse = createCall();
 
         // Update LiveData for loading status
@@ -78,6 +81,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
             }
         });
 
+
         result.addSource(apiResponse, new Observer<ApiResponse<RequestType>>() {
             @Override
             public void onChanged(@Nullable final ApiResponse<RequestType> requestTypeApiResponse) {
@@ -87,10 +91,10 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 Log.d(TAG, "run: attempting to refresh data from network...");
 
                 /*
-                3 Cases:
-                    1) ApiSuccessResponse
-                    2) ApiErrorResponse
-                    3) ApiEmptyResponse
+                    3 Cases:
+                        1) ApiSuccessResponse
+                        2) ApiErrorResponse
+                        3) ApiEmptyResponse
                 */
 
                 if(requestTypeApiResponse instanceof ApiResponse.ApiSuccessResponse){
@@ -155,6 +159,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         });
     }
 
+
     /**
      * Setting new value to LiveData
      * Must be done on MainThread
@@ -188,8 +193,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     public abstract LiveData<ApiResponse<RequestType>> createCall();
 
     // Called when the fetch fails. The child class may want to reset components
-    // like rate limiter.
-
     public abstract void onFetchFailed();
 
     // Returns a LiveData object that represents the resource that's implemented
@@ -197,5 +200,22 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     public final LiveData<Resource<ResultType>> getAsLiveData() {
         return result;
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

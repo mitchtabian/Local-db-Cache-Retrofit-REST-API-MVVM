@@ -1,6 +1,8 @@
 package com.codingwithmitch.foodrecipes.requests.responses;
 
 
+import android.util.Log;
+
 import com.codingwithmitch.foodrecipes.util.CheckRecipeApiKey;
 
 import java.io.IOException;
@@ -17,6 +19,13 @@ public class ApiResponse<T> {
     private static final String TAG = "ApiResponse";
 
     public ApiResponse<T> create(Throwable error){
+        Log.d(TAG, "create: " + error.getMessage());
+        Log.d(TAG, "create: " + error.getCause());
+        Log.d(TAG, "create: " + error.getLocalizedMessage());
+        Log.d(TAG, "create: " + error.fillInStackTrace());
+        for(Throwable throwable: error.getSuppressed()){
+            Log.d(TAG, "create: " + throwable.getMessage());
+        }
         return new ApiErrorResponse<>(error.getMessage().equals("") ? error.getMessage() : "Unknown error\nCheck network connection");
     }
 

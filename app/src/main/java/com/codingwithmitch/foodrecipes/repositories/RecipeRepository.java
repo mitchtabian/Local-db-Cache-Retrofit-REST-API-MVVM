@@ -20,8 +20,6 @@ import com.codingwithmitch.foodrecipes.util.Resource;
 
 import java.util.List;
 
-import retrofit2.Call;
-
 public class RecipeRepository {
 
     private static final String TAG = "RecipeRepository";
@@ -41,8 +39,7 @@ public class RecipeRepository {
     }
 
     public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber){
-        return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance()){
-
+        return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance() ){
 
             @Override
             public void saveCallResult(@NonNull RecipeSearchResponse item) {
@@ -95,6 +92,7 @@ public class RecipeRepository {
         }.getAsLiveData();
     }
 
+
     public LiveData<Resource<Recipe>> searchRecipeApi(final String recipeId){
         return new NetworkBoundResource<Recipe, RecipeResponse>(AppExecutors.getInstance()){
 
@@ -144,6 +142,7 @@ public class RecipeRepository {
             public void onFetchFailed() {
 
             }
+
         }.getAsLiveData();
     }
 
