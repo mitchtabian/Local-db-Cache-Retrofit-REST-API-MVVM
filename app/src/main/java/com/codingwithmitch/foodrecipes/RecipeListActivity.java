@@ -72,9 +72,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
-        mAdapter.displayLoading();
-        mRecipeListViewModel.searchRecipesApi(category, 1);
-        mSearchView.clearFocus();
+        
     }
 
 }
