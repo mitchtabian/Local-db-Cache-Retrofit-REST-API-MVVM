@@ -13,6 +13,7 @@ import com.codingwithmitch.foodrecipes.requests.responses.ApiResponse;
 
 public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
+
     private AppExecutors appExecutors;
     private MediatorLiveData<Resource<CacheObject>> result = new MediatorLiveData<>();
 
@@ -52,6 +53,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
             }
         });
     }
+
 
     /**
      * Setting new value to LiveData
