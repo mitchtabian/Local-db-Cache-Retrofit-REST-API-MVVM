@@ -53,4 +53,8 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    // Room
+    implementation "android.arch.persistence.room:runtime:$lifecycle_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
+
 }
