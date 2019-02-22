@@ -66,7 +66,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     // Called to save the result of the API response into the database.
     @WorkerThread
-    public abstract void saveCallResult(@NonNull CacheObject item);
+    public abstract void saveCallResult(@NonNull RequestObject item);
 
     // Called with the data in the database to decide whether to fetch
     // potentially updated data from the network.
