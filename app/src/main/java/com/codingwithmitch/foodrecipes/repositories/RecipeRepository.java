@@ -58,7 +58,11 @@ public class RecipeRepository {
             @NonNull
             @Override
             public LiveData<ApiResponse<RecipeSearchResponse>> createCall() {
-                return null;
+                return ServiceGenerator.getRecipeApi().searchRecipe(
+                        Constants.API_KEY,
+                        query,
+                        String.valueOf(pageNumber)
+                );
             }
 
         }.getAsLiveData();
