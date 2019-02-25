@@ -3,11 +3,9 @@ package com.codingwithmitch.foodrecipes.persistence;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.codingwithmitch.foodrecipes.models.Recipe;
-
 
 @Database(entities = {Recipe.class}, version = 1)
 public abstract class RecipeDatabase extends RoomDatabase {
@@ -27,5 +25,10 @@ public abstract class RecipeDatabase extends RoomDatabase {
         return instance;
     }
 
-
 }
+
+
+
+
+
+
