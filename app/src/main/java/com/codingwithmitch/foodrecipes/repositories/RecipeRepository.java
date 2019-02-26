@@ -40,7 +40,6 @@ public class RecipeRepository {
 
     public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber){
         return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance() ){
-
             @Override
             public void saveCallResult(@NonNull RecipeSearchResponse item) {
                 if(item.getRecipes() != null){ // recipe list will be null if api key is expired
