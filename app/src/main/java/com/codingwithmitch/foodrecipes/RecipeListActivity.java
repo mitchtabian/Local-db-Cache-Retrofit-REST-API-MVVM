@@ -191,6 +191,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             super.onBackPressed();
         }
         else {
+            mRecipeListViewModel.cancelSearchRequest();
             mRecipeListViewModel.setViewCategories();
         }
     }
