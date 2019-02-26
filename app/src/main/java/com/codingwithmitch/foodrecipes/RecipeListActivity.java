@@ -121,7 +121,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
 
     private void searchRecipeApi(String query){
+        mRecyclerView.smoothScrollToPosition(0);
         mRecipeListViewModel.searchRecipesApi(query, 1);
+        mSearchView.clearFocus();
     }
 
     private void initRecyclerView(){
@@ -130,6 +132,18 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecyclerView.addItemDecoration(itemDecorator);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+
+                if(!mRecyclerView.canScrollVertically(1)
+                        && mRecipeListViewModel.getViewstate().getValue() == RecipeListViewModel.ViewState.RECIPES){
+                    // search the next page
+                    mRecipeListViewModel.searchNextPage();
+                }
+            }
+        });
     }
 
     private RequestManager initGlide(){
