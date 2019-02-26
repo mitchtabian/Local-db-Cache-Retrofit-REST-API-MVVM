@@ -20,7 +20,7 @@ public class ApiResponse<T> {
 
         if(response.isSuccessful()){
             T body = response.body();
-
+            
             if(body == null || response.code() == 204){ // 204 is empty response
                 return new ApiEmptyResponse<>();
             }
