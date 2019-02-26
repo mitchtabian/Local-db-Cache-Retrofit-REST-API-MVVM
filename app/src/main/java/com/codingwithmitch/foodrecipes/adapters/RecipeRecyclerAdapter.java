@@ -108,13 +108,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         else if(mRecipes.get(position).getTitle().equals("LOADING...")){
             return LOADING_TYPE;
         }
-        else if(mRecipes.get(position).getTitle().equals("EXHAUSTED...")){
+        else if(mRecipes.get(position).getTitle().equals("EXHAUSTED...")) {
             return EXHAUSTED_TYPE;
-        }
-        else if(position == mRecipes.size() - 1
-                && position != 0
-                && !mRecipes.get(position).getTitle().equals("EXHAUSTED...")){
-            return LOADING_TYPE;
         }
         else{
             return RECIPE_TYPE;
@@ -129,24 +124,47 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         notifyDataSetChanged();
     }
 
-    private void hideLoading(){
-        if(isLoading()){
-            for(Recipe recipe: mRecipes){
-                if(recipe.getTitle().equals("LOADING...")){
-                    mRecipes.remove(recipe);
-                }
+    public void hideLoading(){
+        if(isLoading()) {
+            if (mRecipes.get(0).getTitle().equals("LOADING...")) {
+                mRecipes.remove(mRecipes.size() - 1);
             }
-            notifyDataSetChanged();
         }
+        if(isLoading()){
+            if(mRecipes.get(mRecipes.size() - 1).getTitle().equals("LOADING...")){
+                mRecipes.remove(mRecipes.size() - 1);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void displayOnlyLoading(){
+        clearRecipesList();
+        Recipe recipe = new Recipe();
+        recipe.setTitle("LOADING...");
+        mRecipes.add(recipe);
+        notifyDataSetChanged();
+    }
+
+
+    private void clearRecipesList(){
+        if(mRecipes == null){
+            mRecipes = new ArrayList<>();
+        }
+        else {
+            mRecipes.clear();
+        }
+        notifyDataSetChanged();
     }
 
     public void displayLoading(){
+        if(mRecipes == null){
+            mRecipes = new ArrayList<>();
+        }
         if(!isLoading()){
             Recipe recipe = new Recipe();
             recipe.setTitle("LOADING...");
-            List<Recipe> loadingList = new ArrayList<>();
-            loadingList.add(recipe);
-            mRecipes = loadingList;
+            mRecipes.add(recipe); // loading at bottom of screen
             notifyDataSetChanged();
         }
     }
