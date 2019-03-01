@@ -23,7 +23,6 @@ public class RecipeSearchResponse {
     @Expose()
     private String error;
 
-    @Nullable
     public String getError() {
         return error;
     }

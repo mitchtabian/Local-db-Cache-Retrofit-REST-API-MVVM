@@ -63,9 +63,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
-                    if(listResource.data != null) {
-                        switch (listResource.status) {
-                            case LOADING: {
+                    if(listResource.data != null){
+                        switch (listResource.status){
+                            case LOADING:{
                                 if(mRecipeListViewModel.getPageNumber() > 1){
                                     mAdapter.displayLoading();
                                 }
@@ -74,17 +74,11 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                                 }
                                 break;
                             }
-                            case SUCCESS: {
-                                Log.d(TAG, "onChanged: cache has been refreshed.");
-                                Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
-                                mAdapter.hideLoading();
-                                mAdapter.setRecipes(listResource.data);
-                                break;
-                            }
-                            case ERROR: {
-                                Log.e(TAG, "onChanged: cannot refresh cache.");
+
+                            case ERROR:{
+                                Log.e(TAG, "onChanged: cannot refresh the cache." );
                                 Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
-                                Log.e(TAG, "onChanged: status: ERROR, #Recipes: " + listResource.data.size());
+                                Log.e(TAG, "onChanged: status: ERROR, #recipes: " + listResource.data.size());
                                 mAdapter.hideLoading();
                                 mAdapter.setRecipes(listResource.data);
                                 Toast.makeText(RecipeListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
@@ -94,9 +88,16 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                                 }
                                 break;
                             }
+
+                            case SUCCESS:{
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
+                                mAdapter.hideLoading();
+                                mAdapter.setRecipes(listResource.data);
+                                break;
+                            }
                         }
                     }
-
                 }
             }
         });
@@ -122,7 +123,17 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         });
     }
 
-    private void searchRecipeApi(String query){
+    private RequestManager initGlide(){
+
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.white_background)
+                .error(R.drawable.white_background);
+
+        return Glide.with(this)
+                .setDefaultRequestOptions(options);
+    }
+
+    private void searchRecipesApi(String query){
         mRecyclerView.smoothScrollToPosition(0);
         mRecipeListViewModel.searchRecipesApi(query, 1);
         mSearchView.clearFocus();
@@ -135,16 +146,21 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecyclerView.addItemDecoration(itemDecorator);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<String>(Glide.with(this), mAdapter, viewPreloader, 30);
+        RecyclerViewPreloader<String> preloader = new RecyclerViewPreloader<String>(
+                Glide.with(this),
+                mAdapter,
+                viewPreloader,
+                30);
+
         mRecyclerView.addOnScrollListener(preloader);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
                 if(!mRecyclerView.canScrollVertically(1)
                         && mRecipeListViewModel.getViewstate().getValue() == RecipeListViewModel.ViewState.RECIPES){
-                    // search the next page
                     mRecipeListViewModel.searchNextPage();
                 }
             }
@@ -153,18 +169,12 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private RequestManager initGlide(){
-        RequestOptions options = new RequestOptions()
-                .placeholder(R.drawable.white_background);
-
-        return Glide.with(this).setDefaultRequestOptions(options);
-    }
-
     private void initSearchView(){
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                searchRecipeApi(s);
+
+                searchRecipesApi(s);
                 return false;
             }
 
@@ -184,7 +194,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
-        searchRecipeApi(category);
+        searchRecipesApi(category);
     }
 
     private void displaySearchCategories(){
@@ -197,7 +207,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         if(mRecipeListViewModel.getViewstate().getValue() == RecipeListViewModel.ViewState.CATEGORIES){
             super.onBackPressed();
         }
-        else {
+        else{
             mRecipeListViewModel.cancelSearchRequest();
             mRecipeListViewModel.setViewCategories();
         }

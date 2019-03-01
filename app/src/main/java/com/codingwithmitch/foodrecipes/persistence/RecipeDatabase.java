@@ -8,7 +8,6 @@ import android.content.Context;
 
 import com.codingwithmitch.foodrecipes.models.Recipe;
 
-
 @Database(entities = {Recipe.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class RecipeDatabase extends RoomDatabase {
@@ -31,3 +30,9 @@ public abstract class RecipeDatabase extends RoomDatabase {
     public abstract RecipeDao getRecipeDao();
 
 }
+
+
+
+
+
+

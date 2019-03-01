@@ -103,12 +103,31 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         else if(mRecipes.get(position).getTitle().equals("LOADING...")){
             return LOADING_TYPE;
         }
-        else if(mRecipes.get(position).getTitle().equals("EXHAUSTED...")) {
+        else if(mRecipes.get(position).getTitle().equals("EXHAUSTED...")){
             return EXHAUSTED_TYPE;
         }
         else{
             return RECIPE_TYPE;
         }
+    }
+
+    // display loading during search request
+    public void displayOnlyLoading(){
+        clearRecipesList();
+        Recipe recipe = new Recipe();
+        recipe.setTitle("LOADING...");
+        mRecipes.add(recipe);
+        notifyDataSetChanged();
+    }
+
+    private void clearRecipesList(){
+        if(mRecipes == null){
+            mRecipes = new ArrayList<>();
+        }
+        else{
+            mRecipes.clear();
+        }
+        notifyDataSetChanged();
     }
 
     public void setQueryExhausted(){
@@ -120,38 +139,18 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void hideLoading(){
-        if(isLoading()) {
-            if (mRecipes.get(0).getTitle().equals("LOADING...")) {
-                mRecipes.remove(mRecipes.size() - 1);
-            }
-        }
         if(isLoading()){
-            if(mRecipes.get(mRecipes.size() - 1).getTitle().equals("LOADING...")){
+            if(mRecipes.get(0).getTitle().equals("LOADING...")){
+                mRecipes.remove(0);
+            }
+            else if(mRecipes.get(mRecipes.size() - 1).equals("LOADING...")){
                 mRecipes.remove(mRecipes.size() - 1);
             }
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
-    public void displayOnlyLoading(){
-        clearRecipesList();
-        Recipe recipe = new Recipe();
-        recipe.setTitle("LOADING...");
-        mRecipes.add(recipe);
-        notifyDataSetChanged();
-    }
-
-
-    private void clearRecipesList(){
-        if(mRecipes == null){
-            mRecipes = new ArrayList<>();
-        }
-        else {
-            mRecipes.clear();
-        }
-        notifyDataSetChanged();
-    }
-
+    // pagination loading
     public void displayLoading(){
         if(mRecipes == null){
             mRecipes = new ArrayList<>();
@@ -159,7 +158,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(!isLoading()){
             Recipe recipe = new Recipe();
             recipe.setTitle("LOADING...");
-            mRecipes.add(recipe); // loading at bottom of screen
+            mRecipes.add(recipe);
             notifyDataSetChanged();
         }
     }
@@ -214,7 +213,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public List<String> getPreloadItems(int position) {
         String url = mRecipes.get(position).getImage_url();
-        if (TextUtils.isEmpty(url)) {
+        if(TextUtils.isEmpty(url)){
             return Collections.emptyList();
         }
         return Collections.singletonList(url);

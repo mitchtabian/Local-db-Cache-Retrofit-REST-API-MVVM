@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.codingwithmitch.foodrecipes.R;
 import com.codingwithmitch.foodrecipes.models.Recipe;
 
@@ -24,8 +26,8 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.
                               RequestManager requestManager) {
         super(itemView);
 
-        this.listener = listener;
         this.requestManager = requestManager;
+        this.listener = listener;
         categoryImage = itemView.findViewById(R.id.category_image);
         categoryTitle = itemView.findViewById(R.id.category_title);
 
@@ -33,6 +35,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void onBind(Recipe recipe){
+
         Uri path = Uri.parse("android.resource://com.codingwithmitch.foodrecipes/drawable/" + recipe.getImage_url());
         requestManager
                 .load(path)

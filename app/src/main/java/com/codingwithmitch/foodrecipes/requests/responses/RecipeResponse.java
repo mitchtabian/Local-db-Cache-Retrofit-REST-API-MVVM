@@ -17,14 +17,13 @@ public class RecipeResponse {
     @Expose()
     private String error;
 
-    @Nullable
-    public Recipe getRecipe(){
-        return recipe;
+    public String getError() {
+        return error;
     }
 
     @Nullable
-    public String getError() {
-        return error;
+    public Recipe getRecipe(){
+        return recipe;
     }
 
     @Override
