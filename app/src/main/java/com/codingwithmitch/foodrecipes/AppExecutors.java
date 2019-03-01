@@ -1,5 +1,6 @@
 package com.codingwithmitch.foodrecipes;
 
+
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -19,11 +20,12 @@ public class AppExecutors {
         return instance;
     }
 
-    private final Executor mDiskIO = Executors.newSingleThreadExecutor(); // Will not use additional threads
+    private final Executor mDiskIO = Executors.newSingleThreadExecutor();
 
-    private final Executor mMainThreadExecutor = new MainThreadExecutor(); // executes on main thread
+    private final Executor mMainThreadExecutor = new MainThreadExecutor();
 
-    public Executor diskIO() {
+
+    public Executor diskIO(){
         return mDiskIO;
     }
 
@@ -31,8 +33,8 @@ public class AppExecutors {
         return mMainThreadExecutor;
     }
 
+    private static class MainThreadExecutor implements Executor{
 
-    private static class MainThreadExecutor implements Executor {
         private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         @Override

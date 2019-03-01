@@ -7,7 +7,6 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.codingwithmitch.foodrecipes.models.Recipe;
-import com.codingwithmitch.foodrecipes.util.Converters;
 
 @Database(entities = {Recipe.class}, version = 1)
 @TypeConverters({Converters.class})
@@ -29,4 +28,11 @@ public abstract class RecipeDatabase extends RoomDatabase {
     }
 
     public abstract RecipeDao getRecipeDao();
+
 }
+
+
+
+
+
+
