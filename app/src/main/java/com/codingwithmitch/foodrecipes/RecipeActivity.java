@@ -93,11 +93,12 @@ public class RecipeActivity extends BaseActivity {
 
     private void setRecipeProperties(Recipe recipe){
         if(recipe != null){
-            RequestOptions requestOptions = new RequestOptions()
-                    .placeholder(R.drawable.white_background);
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.drawable.white_background)
+                    .error(R.drawable.white_background);
 
             Glide.with(this)
-                    .setDefaultRequestOptions(requestOptions)
+                    .setDefaultRequestOptions(options)
                     .load(recipe.getImage_url())
                     .into(mRecipeImage);
 
@@ -111,29 +112,30 @@ public class RecipeActivity extends BaseActivity {
     private void setIngredients(Recipe recipe){
         mRecipeIngredientsContainer.removeAllViews();
 
-        // Recipe can have null ingredients if user has never visited RecipeActivity for this
-        // particular recipe
         if(recipe.getIngredients() != null){
             for(String ingredient: recipe.getIngredients()){
                 TextView textView = new TextView(this);
                 textView.setText(ingredient);
                 textView.setTextSize(15);
-                textView.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-                ));
+                textView.setLayoutParams(
+                        new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
                 mRecipeIngredientsContainer.addView(textView);
             }
         }
         else{
             TextView textView = new TextView(this);
-            textView.setText("Error retrieving ingredients.\n\nCheck network connection.");
+            textView.setText("Error retrieving ingredients.\nCheck network connection.");
             textView.setTextSize(15);
-            textView.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
+            textView.setLayoutParams(
+                    new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
             mRecipeIngredientsContainer.addView(textView);
         }
     }
+
 
     private void showParent(){
         mScrollView.setVisibility(View.VISIBLE);
