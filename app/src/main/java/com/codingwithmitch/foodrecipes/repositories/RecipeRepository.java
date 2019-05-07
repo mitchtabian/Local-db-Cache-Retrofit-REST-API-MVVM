@@ -1,6 +1,7 @@
 package com.codingwithmitch.foodrecipes.repositories;
 
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -8,7 +9,8 @@ import android.util.Log;
 import com.codingwithmitch.foodrecipes.AppExecutors;
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.codingwithmitch.foodrecipes.persistence.RecipeDao;
-import com.codingwithmitch.foodrecipes.requests.RecipeApi;
+import com.codingwithmitch.foodrecipes.persistence.RecipeDatabase;
+import com.codingwithmitch.foodrecipes.requests.ServiceGenerator;
 import com.codingwithmitch.foodrecipes.requests.responses.ApiResponse;
 import com.codingwithmitch.foodrecipes.requests.responses.RecipeResponse;
 import com.codingwithmitch.foodrecipes.requests.responses.RecipeSearchResponse;
@@ -18,23 +20,28 @@ import com.codingwithmitch.foodrecipes.util.Resource;
 
 import java.util.List;
 
-
 public class RecipeRepository {
 
     private static final String TAG = "RecipeRepository";
 
-    private final RecipeDao recipeDao;
-    private final RecipeApi recipeApi;
-    private final AppExecutors appExecutors;
+    private static RecipeRepository instance;
+    private RecipeDao recipeDao;
 
-    public RecipeRepository(RecipeDao recipeDao, RecipeApi recipeApi, AppExecutors appExecutors) {
-        this.appExecutors = appExecutors;
-        this.recipeApi = recipeApi;
-        this.recipeDao = recipeDao;
+    public static RecipeRepository getInstance(Context context){
+        if(instance == null){
+            instance = new RecipeRepository(context);
+        }
+        return instance;
     }
 
+
+    private RecipeRepository(Context context) {
+        recipeDao = RecipeDatabase.getInstance(context).getRecipeDao();
+    }
+
+
     public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber){
-        return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(appExecutors){
+        return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance()){
 
             @Override
             protected void saveCallResult(@NonNull RecipeSearchResponse item) {
@@ -75,7 +82,7 @@ public class RecipeRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<RecipeSearchResponse>> createCall() {
-                return recipeApi
+                return ServiceGenerator.getRecipeApi()
                         .searchRecipe(
                                 Constants.API_KEY,
                                 query,
@@ -86,7 +93,7 @@ public class RecipeRepository {
     }
 
     public LiveData<Resource<Recipe>> searchRecipesApi(final String recipeId){
-        return new NetworkBoundResource<Recipe, RecipeResponse>(appExecutors){
+        return new NetworkBoundResource<Recipe, RecipeResponse>(AppExecutors.getInstance()){
             @Override
             protected void saveCallResult(@NonNull RecipeResponse item) {
 
@@ -123,7 +130,7 @@ public class RecipeRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<RecipeResponse>> createCall() {
-                return recipeApi.getRecipe(
+                return ServiceGenerator.getRecipeApi().getRecipe(
                         Constants.API_KEY,
                         recipeId
                 );

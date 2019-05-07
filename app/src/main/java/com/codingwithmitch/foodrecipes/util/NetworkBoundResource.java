@@ -13,23 +13,19 @@ import android.util.Log;
 import com.codingwithmitch.foodrecipes.AppExecutors;
 import com.codingwithmitch.foodrecipes.requests.responses.ApiResponse;
 
-import javax.inject.Inject;
-
 // CacheObject: Type for the Resource data. (database cache)
 // RequestObject: Type for the API response. (network request)
 public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     private static final String TAG = "NetworkBoundResource";
 
-    private final AppExecutors appExecutors;
-
+    private AppExecutors appExecutors;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();
 
     public NetworkBoundResource(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         init();
     }
-
 
     private void init(){
 

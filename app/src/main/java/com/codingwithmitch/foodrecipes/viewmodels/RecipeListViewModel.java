@@ -1,4 +1,4 @@
-package com.codingwithmitch.foodrecipes.ui.recipelist;
+package com.codingwithmitch.foodrecipes.viewmodels;
 
 
 import android.app.Application;
@@ -7,7 +7,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,9 +20,7 @@ import com.codingwithmitch.foodrecipes.util.Resource;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-public class RecipeListViewModel extends ViewModel {
+public class RecipeListViewModel extends AndroidViewModel {
 
     private static final String TAG = "RecipeListViewModel";
 
@@ -32,7 +29,7 @@ public class RecipeListViewModel extends ViewModel {
 
     private MutableLiveData<ViewState> viewState;
     private MediatorLiveData<Resource<List<Recipe>>> recipes = new MediatorLiveData<>();
-    private final RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
 
     // query extras
     private boolean isQueryExhausted;
@@ -42,9 +39,9 @@ public class RecipeListViewModel extends ViewModel {
     private boolean cancelRequest;
     private long requestStartTime;
 
-    @Inject
-    public RecipeListViewModel(RecipeRepository repository) {
-        this.recipeRepository = repository;
+    public RecipeListViewModel(@NonNull Application application) {
+        super(application);
+        recipeRepository = RecipeRepository.getInstance(application);
         init();
 
     }

@@ -1,4 +1,4 @@
-package com.codingwithmitch.foodrecipes.ui.recipelist;
+package com.codingwithmitch.foodrecipes;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -19,29 +19,22 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.util.ViewPreloadSizeProvider;
-import com.codingwithmitch.foodrecipes.BaseActivity;
-import com.codingwithmitch.foodrecipes.R;
 import com.codingwithmitch.foodrecipes.adapters.OnRecipeListener;
 import com.codingwithmitch.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.codingwithmitch.foodrecipes.models.Recipe;
-import com.codingwithmitch.foodrecipes.ui.recipe.RecipeActivity;
 import com.codingwithmitch.foodrecipes.util.Resource;
+import com.codingwithmitch.foodrecipes.util.Testing;
 import com.codingwithmitch.foodrecipes.util.VerticalSpacingItemDecorator;
-import com.codingwithmitch.foodrecipes.viewmodels.ViewModelProviderFactory;
+import com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import static com.codingwithmitch.foodrecipes.ui.recipelist.RecipeListViewModel.QUERY_EXHAUSTED;
+import static com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel.QUERY_EXHAUSTED;
 
 
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
 
     private static final String TAG = "RecipeListActivity";
-
-    @Inject
-    ViewModelProviderFactory providerFactory;
 
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView mRecyclerView;
@@ -55,7 +48,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecyclerView = findViewById(R.id.recipe_list);
         mSearchView = findViewById(R.id.search_view);
 
-        mRecipeListViewModel = ViewModelProviders.of(this, providerFactory).get(RecipeListViewModel.class);
+        mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
         initRecyclerView();
         initSearchView();
