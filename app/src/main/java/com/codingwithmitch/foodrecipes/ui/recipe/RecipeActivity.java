@@ -1,4 +1,4 @@
-package com.codingwithmitch.foodrecipes;
+package com.codingwithmitch.foodrecipes.ui.recipe;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,13 +15,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.codingwithmitch.foodrecipes.BaseActivity;
+import com.codingwithmitch.foodrecipes.R;
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.codingwithmitch.foodrecipes.util.Resource;
-import com.codingwithmitch.foodrecipes.viewmodels.RecipeViewModel;
+import com.codingwithmitch.foodrecipes.viewmodels.ViewModelProviderFactory;
+
+import javax.inject.Inject;
 
 public class RecipeActivity extends BaseActivity {
 
     private static final String TAG = "RecipeActivity";
+
+    @Inject
+    ViewModelProviderFactory providerFactory;
 
     // UI components
     private AppCompatImageView mRecipeImage;
@@ -42,7 +49,7 @@ public class RecipeActivity extends BaseActivity {
         mRecipeIngredientsContainer = findViewById(R.id.ingredients_container);
         mScrollView = findViewById(R.id.parent);
 
-        mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+        mRecipeViewModel = ViewModelProviders.of(this, providerFactory).get(RecipeViewModel.class);
 
         getIncomingIntent();
     }
