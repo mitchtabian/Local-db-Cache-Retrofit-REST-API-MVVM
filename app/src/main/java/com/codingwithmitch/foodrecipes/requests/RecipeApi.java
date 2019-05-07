@@ -27,3 +27,12 @@ public interface RecipeApi {
             @Query("rId") String recipe_id
     );
 }
+
+
+
+
+
+
+
+
+
