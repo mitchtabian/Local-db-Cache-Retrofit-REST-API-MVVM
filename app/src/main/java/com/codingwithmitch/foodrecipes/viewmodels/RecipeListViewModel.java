@@ -52,7 +52,7 @@ public class RecipeListViewModel extends AndroidViewModel {
             viewState.setValue(ViewState.CATEGORIES);
         }
     }
-    public LiveData<ViewState> getViewstate(){
+    public LiveData<ViewState> getViewState(){
         return viewState;
     }
 

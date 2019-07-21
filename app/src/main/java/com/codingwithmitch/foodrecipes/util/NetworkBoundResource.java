@@ -2,7 +2,6 @@ package com.codingwithmitch.foodrecipes.util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.codingwithmitch.foodrecipes.requests.responses.ApiResponse;
 public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     private static final String TAG = "NetworkBoundResource";
-
     private AppExecutors appExecutors;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();
 
@@ -28,22 +26,14 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     }
 
     private void init(){
-
-        // update LiveData for loading status
-        results.setValue((Resource<CacheObject>) Resource.loading(null));
-
-        // observe LiveData source from local db
-        final LiveData<CacheObject> dbSource = loadFromDb();
-
+        results.setValue((Resource<CacheObject>) Resource.loading(null));// update LiveData for loading status
+        final LiveData<CacheObject> dbSource = loadFromDb();// observe LiveData source from local db
         results.addSource(dbSource, new Observer<CacheObject>() {
             @Override
             public void onChanged(@Nullable CacheObject cacheObject) {
-
                 results.removeSource(dbSource);
-
                 if(shouldFetch(cacheObject)){
-                    // get data from the network
-                    fetchFromNetwork(dbSource);
+                    fetchFromNetwork(dbSource);// get data from the network
                 }
                 else{
                     results.addSource(dbSource, new Observer<CacheObject>() {
@@ -56,52 +46,37 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
             }
         });
     }
-
-    /**
-     * 1) observe local db
-     * 2) if <condition/> query the network
-     * 3) stop observing the local db
-     * 4) insert new data into local db
-     * 5) begin observing local db again to see the refreshed data from network
-     * @param dbSource
-     */
+    /** 1) observe local db
+        2) if <condition/> query the network
+        3) stop observing the local db
+        4) insert new data into local db
+        5) begin observing local db again to see the refreshed data from network
+     * @param dbSource */
     private void fetchFromNetwork(final LiveData<CacheObject> dbSource){
-
         Log.d(TAG, "fetchFromNetwork: called.");
-
-        // update LiveData for loading status
         results.addSource(dbSource, new Observer<CacheObject>() {
             @Override
-            public void onChanged(@Nullable CacheObject cacheObject) {
+            public void onChanged(@Nullable CacheObject cacheObject) {// update LiveData for loading status
                 setValue(Resource.loading(cacheObject));
             }
         });
-
         final LiveData<ApiResponse<RequestObject>> apiResponse = createCall();
-
         results.addSource(apiResponse, new Observer<ApiResponse<RequestObject>>() {
             @Override
             public void onChanged(@Nullable final ApiResponse<RequestObject> requestObjectApiResponse) {
                 results.removeSource(dbSource);
                 results.removeSource(apiResponse);
-
-                /*
-                    3 cases:
+                /*      3 cases:
                        1) ApiSuccessResponse
                        2) ApiErrorResponse
-                       3) ApiEmptyResponse
-                 */
-
+                       3) ApiEmptyResponse */
                 if(requestObjectApiResponse instanceof ApiResponse.ApiSuccessResponse){
                     Log.d(TAG, "onChanged: ApiSuccessResponse.");
-
                     appExecutors.diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-
                             // save the response to the local db
                             saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse)requestObjectApiResponse));
-
                             appExecutors.mainThread().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -179,7 +154,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     // in the base class.
     public final LiveData<Resource<CacheObject>> getAsLiveData(){
         return results;
-    };
+    }
 }
 
 

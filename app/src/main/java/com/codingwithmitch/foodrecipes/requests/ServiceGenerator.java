@@ -1,7 +1,6 @@
 package com.codingwithmitch.foodrecipes.requests;
 
 import com.codingwithmitch.foodrecipes.util.Constants;
-import com.codingwithmitch.foodrecipes.util.LiveDataCallAdapter;
 import com.codingwithmitch.foodrecipes.util.LiveDataCallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -17,25 +16,16 @@ import static com.codingwithmitch.foodrecipes.util.Constants.WRITE_TIMEOUT;
 public class ServiceGenerator {
 
     private static OkHttpClient client = new OkHttpClient.Builder()
-
-            // establish connection to server
-            .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-
-            // time between each byte read from the server
-            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-
-            // time between each byte sent to server
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-
+            .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)// establish connection to server
+            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)// time between each byte read from the server
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)// time between each byte sent to server
             .retryOnConnectionFailure(false)
-
             .build();
-
 
     private static Retrofit.Builder retrofitBuilder =
             new Retrofit.Builder()
                     .baseUrl(Constants.BASE_URL)
-                    .client(client)
+                    //.client(client)
                     .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                     .addConverterFactory(GsonConverterFactory.create());
 

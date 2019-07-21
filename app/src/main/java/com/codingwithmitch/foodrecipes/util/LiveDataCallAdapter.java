@@ -45,7 +45,6 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
                         }
                     });
                 }
-
             }
         };
     }

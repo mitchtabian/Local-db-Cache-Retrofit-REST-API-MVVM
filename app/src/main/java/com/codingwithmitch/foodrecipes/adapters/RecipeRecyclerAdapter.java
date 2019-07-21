@@ -24,9 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
-        ListPreloader.PreloadModelProvider<String>
-{
+public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements ListPreloader.PreloadModelProvider<String> {
 
     private static final int RECIPE_TYPE = 1;
     private static final int LOADING_TYPE = 2;
@@ -49,42 +48,33 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         View view = null;
         switch (i){
-
             case RECIPE_TYPE:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, mOnRecipeListener, requestManager, preloadSizeProvider);
             }
-
             case LOADING_TYPE:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_loading_list_item, viewGroup, false);
                 return new LoadingViewHolder(view);
             }
-
             case EXHAUSTED_TYPE:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_search_exhausted, viewGroup, false);
                 return new SearchExhaustedViewHolder(view);
             }
-
             case CATEGORY_TYPE:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_category_list_item, viewGroup, false);
                 return new CategoryViewHolder(view, mOnRecipeListener, requestManager);
             }
-
             default:{
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, mOnRecipeListener, requestManager, preloadSizeProvider);
             }
         }
-
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
         int itemViewType = getItemViewType(i);
         if(itemViewType == RECIPE_TYPE){
             ((RecipeViewHolder)viewHolder).onBind(mRecipes.get(i));
@@ -92,7 +82,6 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         else if(itemViewType == CATEGORY_TYPE){
             ((CategoryViewHolder)viewHolder).onBind(mRecipes.get(i));
         }
-
     }
 
     @Override
@@ -111,8 +100,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    // display loading during search request
-    public void displayOnlyLoading(){
+    public void displayOnlyLoading(){// display loading during search request
         clearRecipesList();
         Recipe recipe = new Recipe();
         recipe.setTitle("LOADING...");

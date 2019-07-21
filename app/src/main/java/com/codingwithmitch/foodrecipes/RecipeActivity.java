@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.codingwithmitch.foodrecipes.models.Recipe;
@@ -22,15 +21,12 @@ import com.codingwithmitch.foodrecipes.viewmodels.RecipeViewModel;
 public class RecipeActivity extends BaseActivity {
 
     private static final String TAG = "RecipeActivity";
-
     // UI components
     private AppCompatImageView mRecipeImage;
     private TextView mRecipeTitle, mRecipeRank;
     private LinearLayout mRecipeIngredientsContainer;
     private ScrollView mScrollView;
-
     private RecipeViewModel mRecipeViewModel;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +37,7 @@ public class RecipeActivity extends BaseActivity {
         mRecipeRank = findViewById(R.id.recipe_social_score);
         mRecipeIngredientsContainer = findViewById(R.id.ingredients_container);
         mScrollView = findViewById(R.id.parent);
-
         mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
-
         getIncomingIntent();
     }
 
@@ -62,12 +56,10 @@ public class RecipeActivity extends BaseActivity {
                 if(recipeResource != null){
                     if(recipeResource.data != null){
                         switch (recipeResource.status){
-
                             case LOADING:{
                                 showProgressBar(true);
                                 break;
                             }
-
                             case ERROR:{
                                 Log.e(TAG, "onChanged: status: ERROR, Recipe: " + recipeResource.data.getTitle() );
                                 Log.e(TAG, "onChanged: ERROR message: " + recipeResource.message );
@@ -75,7 +67,6 @@ public class RecipeActivity extends BaseActivity {
                                 setRecipeProperties(recipeResource.data);
                                 break;
                             }
-
                             case SUCCESS:{
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
                                 Log.d(TAG, "onChanged: status: SUCCESS, Recipe: " + recipeResource.data.getTitle());
@@ -96,22 +87,18 @@ public class RecipeActivity extends BaseActivity {
             RequestOptions options = new RequestOptions()
                     .placeholder(R.drawable.white_background)
                     .error(R.drawable.white_background);
-
             Glide.with(this)
                     .setDefaultRequestOptions(options)
                     .load(recipe.getImage_url())
                     .into(mRecipeImage);
-
             mRecipeTitle.setText(recipe.getTitle());
             mRecipeRank.setText(String.valueOf(Math.round(recipe.getSocial_rank())));
-
             setIngredients(recipe);
         }
     }
 
     private void setIngredients(Recipe recipe){
         mRecipeIngredientsContainer.removeAllViews();
-
         if(recipe.getIngredients() != null){
             for(String ingredient: recipe.getIngredients()){
                 TextView textView = new TextView(this);
@@ -135,7 +122,6 @@ public class RecipeActivity extends BaseActivity {
             mRecipeIngredientsContainer.addView(textView);
         }
     }
-
 
     private void showParent(){
         mScrollView.setVisibility(View.VISIBLE);

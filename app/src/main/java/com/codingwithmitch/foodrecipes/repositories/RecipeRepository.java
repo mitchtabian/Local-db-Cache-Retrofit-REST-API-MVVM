@@ -34,21 +34,16 @@ public class RecipeRepository {
         return instance;
     }
 
-
     private RecipeRepository(Context context) {
         recipeDao = RecipeDatabase.getInstance(context).getRecipeDao();
     }
 
-
     public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber){
         return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance()){
-
             @Override
             protected void saveCallResult(@NonNull RecipeSearchResponse item) {
                 if(item.getRecipes() != null){ // recipe list will be null if the api key is expired
-
                     Recipe[] recipes = new Recipe[item.getRecipes().size()];
-
                     int index = 0;
                     for(long rowid: recipeDao.insertRecipes((Recipe[]) (item.getRecipes().toArray(recipes)))){
                         if(rowid == -1){
@@ -96,9 +91,7 @@ public class RecipeRepository {
         return new NetworkBoundResource<Recipe, RecipeResponse>(AppExecutors.getInstance()){
             @Override
             protected void saveCallResult(@NonNull RecipeResponse item) {
-
-                // will be null if API key is expired
-                if(item.getRecipe() != null){
+                if(item.getRecipe() != null){// will be null if API key is expired
                     item.getRecipe().setTimestamp((int)(System.currentTimeMillis() / 1000));
                     recipeDao.insertRecipe(item.getRecipe());
                 }

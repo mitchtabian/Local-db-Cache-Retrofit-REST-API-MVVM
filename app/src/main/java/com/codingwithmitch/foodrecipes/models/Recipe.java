@@ -1,6 +1,5 @@
 package com.codingwithmitch.foodrecipes.models;
 
-
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -34,7 +33,6 @@ public class Recipe implements Parcelable{
 
     @ColumnInfo(name = "timestamp")
     private int timestamp;
-
 
     public Recipe(@NonNull String recipe_id, String title, String publisher, String image_url,
                   float social_rank, String[] ingredients, int timestamp) {
