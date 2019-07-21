@@ -1,7 +1,7 @@
 package com.codingwithmitch.foodrecipes.requests.responses;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.codingwithmitch.foodrecipes.models.Recipe;
 import com.google.gson.annotations.Expose;

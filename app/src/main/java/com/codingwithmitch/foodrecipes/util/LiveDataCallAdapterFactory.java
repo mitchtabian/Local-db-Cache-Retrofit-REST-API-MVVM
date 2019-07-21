@@ -1,7 +1,7 @@
 package com.codingwithmitch.foodrecipes.util;
 
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 import com.codingwithmitch.foodrecipes.requests.responses.ApiResponse;
 
