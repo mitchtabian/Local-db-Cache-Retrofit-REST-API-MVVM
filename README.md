@@ -37,7 +37,6 @@ In this course you'll learn how to build a <strong>local database cache with SQL
 <br><br>
 
 <h2>Contributors</h2>
-<hr>
 <ol>
   <li><a href="https://github.com/gmiklay" target="_blank">gmiklay</a></li>
 </ol>
