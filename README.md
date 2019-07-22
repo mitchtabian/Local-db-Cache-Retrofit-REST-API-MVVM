@@ -38,5 +38,11 @@ In this course you'll learn how to build a <strong>local database cache with SQL
 
 <h2>Contributors</h2>
 <ol>
-  <li><a href="https://github.com/gmiklay" target="_blank">gmiklay</a></li>
+  <li>
+    <a href="https://github.com/gmiklay" target="_blank">gmiklay</a><br>
+    <ol>
+      <li>Converted to AndroidX: branch: <a href="https://github.com/mitchtabian/Local-db-Cache-Retrofit-REST-API-MVVM/tree/pr/1" target="_blank">pr/1</a></li>
+    </ol>
+  
+  </li>
 </ol>
