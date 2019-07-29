@@ -105,8 +105,7 @@ public class RecipeListViewModel extends AndroidViewModel {
 
                             isPerformingQuery = false;
                             if(listResource.data != null){
-                                if(listResource.data.size() == 0 ||
-                                        listResource.data.size() == recipes.getValue().data.size()){
+                                if(listResource.data.size() == 0 ){
                                     Log.d(TAG, "onChanged: query is exhausted...");
                                     recipes.setValue(
                                             new Resource<List<Recipe>>(
@@ -123,6 +122,9 @@ public class RecipeListViewModel extends AndroidViewModel {
                         else if(listResource.status == Resource.Status.ERROR){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
                             isPerformingQuery = false;
+                            if(listResource.message.equals(QUERY_EXHAUSTED)){
+                                isQueryExhausted = true;
+                            }
                             recipes.removeSource(repositorySource);
                         }
                         recipes.setValue(listResource);

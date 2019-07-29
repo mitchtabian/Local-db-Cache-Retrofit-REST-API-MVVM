@@ -45,7 +45,9 @@ public class RecipeRepository {
 
             @Override
             protected void saveCallResult(@NonNull RecipeSearchResponse item) {
+
                 if(item.getRecipes() != null){ // recipe list will be null if the api key is expired
+//                    Log.d(TAG, "saveCallResult: recipe response: " + item.toString());
 
                     Recipe[] recipes = new Recipe[item.getRecipes().size()];
 

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
+import static com.codingwithmitch.foodrecipes.viewmodels.RecipeListViewModel.QUERY_EXHAUSTED;
+
 
 /**
  * Generic class for handling responses from Retrofit
@@ -25,6 +27,10 @@ public class ApiResponse<T> {
                 if(!CheckRecipeApiKey.isRecipeApiKeyValid((RecipeSearchResponse)body)){
                     String errorMsg = "Api key is invalid or expired.";
                     return new ApiErrorResponse<>(errorMsg);
+                }
+                if(((RecipeSearchResponse) body).getCount() == 0){
+                    // query is exhausted
+                    return new ApiErrorResponse<>(QUERY_EXHAUSTED);
                 }
             }
 
