@@ -102,6 +102,8 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             // save the response to the local db
                             saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse)requestObjectApiResponse));
 
+
+
                             appExecutors.mainThread().execute(new Runnable() {
                                 @Override
                                 public void run() {

@@ -98,12 +98,15 @@ public class RecipeListViewModel extends AndroidViewModel {
             public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
                 if(!cancelRequest){
                     if(listResource != null){
-                        recipes.setValue(listResource);
                         if(listResource.status == Resource.Status.SUCCESS){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
+                            Log.d(TAG, "onChanged: page number: " + pageNumber);
+                            Log.d(TAG, "onChanged: " + listResource.data);
+
                             isPerformingQuery = false;
                             if(listResource.data != null){
-                                if(listResource.data.size() == 0){
+                                if(listResource.data.size() == 0 ||
+                                        listResource.data.size() == recipes.getValue().data.size()){
                                     Log.d(TAG, "onChanged: query is exhausted...");
                                     recipes.setValue(
                                             new Resource<List<Recipe>>(
@@ -112,6 +115,7 @@ public class RecipeListViewModel extends AndroidViewModel {
                                                     QUERY_EXHAUSTED
                                             )
                                     );
+                                    isQueryExhausted = true;
                                 }
                             }
                             recipes.removeSource(repositorySource);
@@ -121,6 +125,7 @@ public class RecipeListViewModel extends AndroidViewModel {
                             isPerformingQuery = false;
                             recipes.removeSource(repositorySource);
                         }
+                        recipes.setValue(listResource);
                     }
                     else{
                         recipes.removeSource(repositorySource);
