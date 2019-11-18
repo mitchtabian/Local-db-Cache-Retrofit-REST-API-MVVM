@@ -2,12 +2,12 @@ package com.codingwithmitch.foodrecipes.util;
 
 public class Constants {
 
-    public static final String BASE_URL = "https://www.food2fork.com";
+//    public static final String BASE_URL = "https://www.food2fork.com";
+    public static final String BASE_URL = "https://recipesapi.herokuapp.com";
 
-    // YOU NEED YOUR OWN API KEY!!!!!!!!!!!!! https://www.food2fork.com/about/api
-//    public static final String API_KEY = "dadc63b6325aaf398163b40fea9b5e79";
-//    public static final String API_KEY = "280d6f829323eaf44207c1e0a13d9493";
-    public static final String API_KEY = "453556cb475252e7e42d65aa11912447";
+    // API_KEY is no longer necessary since food2fork has shutdown. This can be empty it doesn't matter.
+//    public static final String API_KEY = "453556cb475252e7e42d65aa11912447";
+    public static final String API_KEY = "";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
     public static final int READ_TIMEOUT = 2; // 2 seconds
